@@ -5,8 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build-admin": "vue-cli-service build --mode admin",
-    "build-index": "vue-cli-service build --mode index"
+    "build:admin": "vue-cli-service build admin",
+    "build:index": "vue-cli-service build index",
+    "build:all": "npm run build:admin & npm run build:index"
   },
   "dependencies": {
     "core-js": "^3.6.5",

@@ -18,13 +18,13 @@ const createPage = (name, title = '', chunk = '')=>{
 
 console.log('process.argv = ',process.argv)
 console.log('process.env.NODE_ENV = ',process.env.NODE_ENV)
-var projectname = process.argv[4];// 获取到vue-cli-service  build --mode admin
+var projectname = process.argv.slice(2)[1];// 获取到vue-cli-service  build admin
 var glob = require("glob");
 
 console.log("projectname = ",projectname)
 function getEntry() {
     var entries = {};
-    if (process.env.NODE_ENV == 'multi-production') {
+    if (process.env.NODE_ENV == 'production') {
         entries[projectname] = {
             // page的入口
             entry: 'src/pages/' + projectname + '/main.js',
