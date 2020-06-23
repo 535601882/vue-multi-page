@@ -1,38 +1,10 @@
-# vue-multi 利用 Vue-CLI 進行多頁面開發與打包 
+# vue-multi-page 利用 Vue-CLI 進行多頁面開發并按文件夹打包 
 
 現今流行的前端開發方式不外乎是利用框架進行SPA的網站開發，而 Vue-CLI為 Vue 開發者提供了便利的初始化工具，在不需複雜的設定下我們可以很快的將專案打包成單頁面應用。
 
 然而一個工程師需面對各式各樣的需求，比如一套 landing page 想在不同的管道進行推廣，且需要在前端頁面嵌入各自的統計代碼；又依據這些管道的性向不同，頁面的元件編排也會有些許不同。
 
 在這種情況下，雖然 Vue 可以很便利的共用元件，但若要打包成多個頁面時，總不可能將專案複製多份後，再分別組合吧。
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 # vueCLI 创建多页应用 注意点如下：
@@ -86,37 +58,13 @@ module.exports = {
 
 ```
 <meta 
- attr=”subtitle” 
- content=”<%= htmlWebpackPlugin.options.subtitle %>” 
+ attr="subtitle"
+ content="<%= htmlWebpackPlugin.options.subtitle %>"
 />
 ```
 給予 attr 及 content 後，只需在 code 裡只要以 js 取出即可
 ```document.querySelector(“META[attr=’title’]”).getAttribute(“content”)```
 
-
-
-## public文件夹
-在public目录下新建index.html，admin.html（多个页面对应多个html）
-
-记得修改html下的ID名称
-```
-<div id="index"></div>
-……
-<div id="admin"></div>
-```
-
-main.js中需要对应挂载
-```
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#admin')
-
-……
-
-}).$mount('#index')
-```
 
 
 ## router.js
@@ -131,5 +79,28 @@ const router = new VueRouter({
 
 在默认下, 是只有 index.html 这个入口可以用 history 模式, 如: http://www.xxx.com/xxx/xxx, 而其他的入口只能用 hash 模式, 如: http://www.xxx.com/admin.html#/xxx/xxx, 因为webpack-dev-middleware会将所有的路由都指向 index.html 文件
 
+## package.js
+```
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build:admin": "vue-cli-service build admin",// 单独打包admin
+    "build:index": "vue-cli-service build index",// 单独打包index
+    "build:all": "npm run build:admin & npm run build:index"// 全部一起打包
+  },
+```
 
-## 如何按多页文件夹来打包？ todo
+## 如何按多页文件夹来打包？
+
+### outputDir
+- Default: 'dist' 默认全部打包到dist文件夹下。想要按照多页文件夹来打包的话，就需要知道每次打包时要生成的文件夹名来动态改变dist下的值。思路就是接收build时的打包文件夹参数
+
+利用`process.argv`获取`package.json`下的`build`参数，来动态修改`outputDir`的值
+
+例如运行`vue-cli-service build admin`
+
+`let projectname = process.argv.slice(2)[1];` 获取到 admin
+
+```
+outputDir: "dist/" + projectname,
+```

@@ -3,18 +3,22 @@
         <h1>index home</h1>
         <h2>{{welcome}}</h2>
         <p><router-link :to="{ name: 'About'}">跳转index about</router-link></p>
-        <p><a href="/admin.html#/">admin首页</a></p>
-        <p><a href="/admin.html#/about">admin about</a></p>
+
 
         <button @click="handleToogle">切换数据</button>
+
+        <helloWorld msg="公用组件"></helloWorld>
     </div>
 </template>
 
 <script>
     import {mapState,mapMutations} from 'vuex'
+    import helloWorld from "@/components/HelloWorld"
     export default {
         name: "home",
-        components: {},
+        components: {
+            helloWorld
+        },
         data() {
             return {}
         },
